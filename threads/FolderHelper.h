@@ -52,8 +52,11 @@ public:
 	}
 
 	unsigned long long getDirectorySizeBytes(fs::path basePath) {
+
 		// имитация работы, для проверки времени в Х-поточном режимах
-		std::this_thread::sleep_for(std::chrono::milliseconds(5000));		
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(2500));		
+		std::this_thread::sleep_for(std::chrono::milliseconds(2500));		
 		//return _getDirectorySizeBytes(basePath);
 		return 30;
 	}
