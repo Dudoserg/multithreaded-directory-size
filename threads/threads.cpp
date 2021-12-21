@@ -10,18 +10,29 @@
 #include <functional>
 #include "FolderHelper.h"
 #include "threads.h"
+
 std::mutex mtx;
 using namespace std;
 int COUNT_THREAD = 4;
-int main()
+
+int main(int argc, char* argv[])
 {
+
+    if (argc != 3) {
+        return 0;
+    }
+    else {
+        if (strcmp(argv[1], "-t") || strcmp(argv[1], "--threads"))
+            COUNT_THREAD = std::stoi(argv[2]);
+        else
+            return 0;
+    }
+
     setlocale(LC_ALL, "Russian");
     //FolderHelper* fh = new FolderHelper();
-    //fh->createFolder(fh->BASE_PATH, 5);
+    //fh->createFolder(fh->BASE_PATH, 6);
     //cout << fh->getDirectorySizeBytes("base");
 
-    queue* q = new queue();
-    
     //for (int i = 0; i < 1; i++) {
     //    q->push(
     //        [](string s) {
@@ -34,7 +45,8 @@ int main()
     //    );
     //}
 
-         
+
+    queue* q = new queue();
 
     auto func_keyboard = [](queue* q) {
         FolderHelper* fh = new FolderHelper();
@@ -67,31 +79,24 @@ int main()
                 );
             }
             else {
-                cout << " я не знаю что это  " << endl;
+                // Такого пути не существует, ничего не делаем
+                cout << "error path" << endl;
             }
 
         }
     };
 
-
-
+    // Логика работы потоков
     auto func = [](int threadNumber, int time, queue* q)
     {
         while (true) {
-            //std::cout << " JOB # " << threadNumber << "has started" << std::endl;
-            // выполняем таск
+            // Изымаем из очереди задачу (ждем пока они появятся)
             std::function<std::string()> f = q->pop();
-            cout << "/";
             if (f == nullptr) {
-                // если получили нулл то пора завершаться
-                //cout << " задач нет, получен сигнал на завершение";
+                // если получили нулл то пора завершать поток
                 return nullptr;
             }
             f();
-            //std::cout << "(" << threadNumber << ") " << " got task" << std::endl;
-            //std::cout << "(" << threadNumber << ") " << "result = " << f() << std::endl;
-
-            //std::cout << "(" << threadNumber << ") " << "end" << std::endl << std::endl;
         }
     };
 
@@ -103,7 +108,6 @@ int main()
     for (int i = 0; i < COUNT_THREAD; i++) {
         threadPool.push_back(std::thread(func, i, 1000, q));
     }
-
 
     for (std::thread& t : threadPool) {
         if (t.joinable()) {

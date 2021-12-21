@@ -14,8 +14,6 @@ using namespace std;
 class FolderHelper
 {
 public:
-	
-
 	fs::path BASE_PATH = "base";
 
 	// создаем дерево директорий с вложенностью level
@@ -52,30 +50,22 @@ public:
 	}
 
 	unsigned long long getDirectorySizeBytes(fs::path basePath) {
-
 		// имитация работы, для проверки времени в Х-поточном режимах
-
-		std::this_thread::sleep_for(std::chrono::milliseconds(2500));		
-		std::this_thread::sleep_for(std::chrono::milliseconds(2500));		
-		//return _getDirectorySizeBytes(basePath);
+		//std::this_thread::sleep_for(std::chrono::milliseconds(2500));		
+		//std::this_thread::sleep_for(std::chrono::milliseconds(2500));		
+		return _getDirectorySizeBytes(basePath);
 		return 30;
 	}
 
 private:
 	unsigned long long _getDirectorySizeBytes(fs::path basePath ) {
 		unsigned long long allSize = 0L;
-		//vector<string> files = {};
-		//vector<string> dirs = {};
 		for (const auto& entry : fs::directory_iterator(basePath)) {
 			if (entry.is_directory()) {
-				//std::cout << "[dir]" << entry.path() << std::endl;
-				//dirs.push_back(entry.path().u8string());
 				allSize += _getDirectorySizeBytes(entry.path());
 			}
 			else {
 				allSize += (long)entry.file_size();
-				//std::cout << "[fil]" << entry.path() << " (" << size << ")" << std::endl;
-				//files.push_back(entry.path().u8string());
 			}
 		}
 		return allSize;
