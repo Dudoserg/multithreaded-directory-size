@@ -141,12 +141,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="FolderHelper.cpp" />
+    <ClCompile Include="PrintInThreads.cpp" />
     <ClCompile Include="Queue.cpp" />
+    <ClCompile Include="Test.cpp" />
     <ClCompile Include="threads.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FolderHelper.h" />
+    <ClInclude Include="PrintInThreads.h" />
     <ClInclude Include="Queue.h" />
+    <ClInclude Include="Test.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

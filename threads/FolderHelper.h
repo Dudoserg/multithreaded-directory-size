@@ -14,8 +14,10 @@ using namespace std;
 class FolderHelper
 {
 public:
-	fs::path BASE_PATH = "base";
+	//fs::path BASE_PATH = "base";
 
+
+	/*
 	// создаем дерево директорий с вложенностью level
 	void createFolder(fs::path basePath, int level) {
 
@@ -32,6 +34,7 @@ public:
 		}
 	}
 	// создаем countFiles файлов по пути basePath
+	
 	void createFiles(fs::path basePath, int countFiles) {
 		for (int i = 0; i < countFiles; i++) {
 
@@ -44,46 +47,14 @@ public:
 			ofs.close();
 		}
 	}
+	*/
 
-	bool isPath(fs::path path) {
-		return fs::is_directory(path);
-	}
 
-	unsigned long long getDirectorySizeBytes(fs::path basePath) {
-		// имитация работы, для проверки времени в Х-поточном режимах
-		//std::this_thread::sleep_for(std::chrono::milliseconds(2500));		
-		//std::this_thread::sleep_for(std::chrono::milliseconds(2500));		
-		return _getDirectorySizeBytes(basePath);
-		return 30;
-	}
+	bool isPath(fs::path path);
+
+	unsigned long long getDirectorySizeBytes(fs::path basePath);
 
 private:
-	unsigned long long _getDirectorySizeBytes(fs::path basePath ) {
-		unsigned long long allSize = 0L;
-		for (const auto& entry : fs::directory_iterator(basePath)) {
-			if (entry.is_directory()) {
-				allSize += _getDirectorySizeBytes(entry.path());
-			}
-			else {
-				allSize += (long)entry.file_size();
-			}
-		}
-		return allSize;
-	}
-
-
-	//fs::path getPath(string s, ...) {
-	//	fs::path result("");
-	//	string* argv = &s;
-	//	while (!argv->empty()) {
-	//		//result = result / (*argv);
-	//		std::cout << (*argv) << " ";
-	//		//argv += sizeof(string);
-	//		argv++;
-	//	};
-	//	std::cout << endl;
-	//	return result;
-	//}
-	
+	unsigned long long _getDirectorySizeBytes(fs::path basePath);
 };
 

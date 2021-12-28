@@ -10,6 +10,7 @@
 #include <functional>
 #include "FolderHelper.h"
 #include "threads.h"
+#include "PrintInThreads.h"
 
 std::mutex mtx;
 using namespace std;
@@ -29,22 +30,6 @@ int main(int argc, char* argv[])
     }
 
     setlocale(LC_ALL, "Russian");
-    //FolderHelper* fh = new FolderHelper();
-    //fh->createFolder(fh->BASE_PATH, 6);
-    //cout << fh->getDirectorySizeBytes("base");
-
-    //for (int i = 0; i < 1; i++) {
-    //    q->push(
-    //        [](string s) {
-    //            //std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-    //            //return s + "__";
-    //            FolderHelper* fh = new FolderHelper();
-    //            unsigned long long size = fh->getDirectorySizeBytes(s);
-    //            return to_string(size);
-    //        }
-    //    );
-    //}
-
 
     queue* q = new queue();
 
@@ -69,12 +54,15 @@ int main(int argc, char* argv[])
 
                 q->push(
                     [command]() {
-                        //std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-                        //return s + "__";
-                        FolderHelper* fh = new FolderHelper();
-                        unsigned long long size = fh->getDirectorySizeBytes(command);
-                        cout << command << ":" << size << endl;
-                        return to_string(size);
+                        FolderHelper fh;
+
+                        unsigned long long size = fh.getDirectorySizeBytes(command);
+
+                        PrintInThreads pit;
+                        std::stringstream s;
+                        s << command << ":" << size << endl;
+
+                        pit.print(s);
                     }
                 );
             }
@@ -91,7 +79,7 @@ int main(int argc, char* argv[])
     {
         while (true) {
             // Изымаем из очереди задачу (ждем пока они появятся)
-            std::function<std::string()> f = q->pop();
+            std::function<void()> f = q->pop();
             if (f == nullptr) {
                 // если получили нулл то пора завершать поток
                 return nullptr;

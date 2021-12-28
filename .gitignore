@@ -1,3 +1,7 @@
 Debug/threads.pdb
 .idea
 .vs
+threads/Test.h
+threads/Test.cpp
+/threads/Test.h
+/threads/Test.cpp
